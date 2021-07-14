@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, render_template
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -35,7 +35,7 @@ def get_snap(url):
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return render_template('index.html')
 
 @app.route("/snap")
 def get_snapshot():
@@ -50,10 +50,7 @@ def get_snapshot():
             filename="{}-{}.png".format(url.split('/')[3], url.split('/')[5]))
         return response
     else:
-        return {
-            "status": "error",
-            "message": "Please provide a valid Twitter URL"
-        }
+        return render_template('index.html', error="Please provide a valid Twitter URL")
 
 if __name__ == '__main__':
     app.run(threaded=True, port=5000)
