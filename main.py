@@ -19,13 +19,13 @@ with webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), optio
     # select elements
     tweet = WebDriverWait(driver, timeout=20).until(lambda d: d.find_element_by_tag_name("article"))
     banner = driver.find_element_by_id("layers")
-    icons = driver.find_element_by_xpath('//div[@role="group"]')
+    action_icons = driver.find_element_by_xpath('//div[@role="group"]')
+    more_icons = driver.find_element_by_xpath('//div[@data-testid="tweet"]/div[2]/div/div/div/div[2]')
 
-    # remove login banner
-    driver.execute_script("arguments[0].setAttribute('style','display: none;')", banner)
-
-    # remove icons
-    driver.execute_script("arguments[0].setAttribute('style','display: none;')", icons)
+    # remove unnecessary icons
+    to_remove = [banner, action_icons, more_icons]
+    for element in to_remove:
+        driver.execute_script("arguments[0].setAttribute('style','display: none;')", element)
 
     # select parent element in tweet
     parent = tweet.find_element_by_xpath("..")
