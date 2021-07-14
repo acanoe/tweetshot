@@ -41,6 +41,7 @@ def hello_world():
 def get_snapshot():
     url = request.args.get('url')
     if url is not None and url.startswith("https://twitter.com/"):
+        url = url.split("?")[0]
         image_binary = get_snap(url)
         response = make_response(image_binary)
         response.headers.set('Content-Type', 'image/png')
