@@ -17,21 +17,18 @@ with webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), optio
     driver.get(url)
 
     # select elements
-    tweet = WebDriverWait(driver, timeout=20).until(lambda d: d.find_element_by_tag_name("article"))
+    tweet = WebDriverWait(driver, timeout=20).until(lambda d: d.find_element_by_tag_name("article").find_element_by_xpath(".."))
     banner = driver.find_element_by_id("layers")
     action_icons = driver.find_element_by_xpath('//div[@role="group"]')
     more_icons = driver.find_element_by_xpath('//div[@data-testid="tweet"]/div[2]/div/div/div/div[2]')
 
     # remove unnecessary icons
-    to_remove = [banner, action_icons, more_icons]
-    for element in to_remove:
+    elements_to_remove = [banner, action_icons, more_icons]
+    for element in elements_to_remove:
         driver.execute_script("arguments[0].setAttribute('style','display: none;')", element)
 
-    # select parent element in tweet
-    parent = tweet.find_element_by_xpath("..")
-    
     # take a screenshot
-    parent.screenshot("{}-{}.png".format(url.split('//')[-1].split('.')[0], url.split('/')[3]))
+    tweet.screenshot("{}-{}.png".format(url.split('//')[-1].split('.')[0], url.split('/')[3]))
 
     print("Finished!")
 
