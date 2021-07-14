@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 selenium = "*"
+Flask-RESTful = "*"
+Flask = "*"
+gunicorn = "*"
+flask = "*"
 
 [dev-packages]
 
