@@ -13,10 +13,25 @@ chrome_options.add_argument("--no-sandbox")
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 
 with webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options) as driver:
-    # driver.set_window_size(1280, 1080)
+    # get url
     driver.get(url)
-    element = WebDriverWait(driver, timeout=20).until(lambda d: d.find_element_by_tag_name("article"))
-    element = driver.find_element_by_tag_name("main")
-    element.screenshot("{}-{}.png".format(url.split('//')[-1].split('.')[0], url.split('/')[3]))
+
+    # select elements
+    tweet = WebDriverWait(driver, timeout=20).until(lambda d: d.find_element_by_tag_name("article"))
+    banner = driver.find_element_by_id("layers")
+    icons = driver.find_element_by_xpath('//div[@role="group"]')
+
+    # remove login banner
+    driver.execute_script("arguments[0].setAttribute('style','display: none;')", banner)
+
+    # remove icons
+    driver.execute_script("arguments[0].setAttribute('style','display: none;')", icons)
+
+    # select parent element in tweet
+    parent = tweet.find_element_by_xpath("..")
+    
+    # take a screenshot
+    parent.screenshot("{}-{}.png".format(url.split('//')[-1].split('.')[0], url.split('/')[3]))
+
     print("Finished!")
 
