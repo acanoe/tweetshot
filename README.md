@@ -4,12 +4,17 @@ A simple, heroku-compatible Twitter tweets screenshot generator. A sample projec
 
 ## How to run
 
-1. run `pipenv install`, followed by `pipenv shell`
-2. provide your own Chromedriver and Chrome executables paths:
-
+1. install [pipenv](https://pipenv.pypa.io/en/latest/) if you don't have it already, then run `pipenv install`, followed by `pipenv shell`
+   
+2. provide your own Chromedriver executable path:
 
    ```
-   export CHROMEDRIVER_PATH=/usr/bin/chromedriver
-   export GOOGLE_CHROME_BIN=/usr/bin/brave-browser
+   export CHROMEDRIVER_PATH=/path/to/chromedriver
    ```
-3. run `gunicorn main:app`
+
+   and Chrom(e/ium):
+   ```
+   export GOOGLE_CHROME_BIN=/path/to/chrome-browser
+   ```
+
+3. start the server by running `gunicorn main:app`
