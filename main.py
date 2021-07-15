@@ -6,7 +6,23 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 app = Flask(__name__)
 
+def check_valid_url(url):
+    if url.startswith("https://twitter.com/") or url.startswith("https://mobile.twitter.com/"):
+        if len(url.split("/")) > 5 and url.split("/")[5]:
+            return True
+        else:
+            return False
+    elif url.startswith("https://pic.twitter.com/") or url.startswith("https://t.co/"):
+        if url.split("/")[3]:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
 def get_snap(url):
+    # options
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--hide-scrollbars")
@@ -40,18 +56,28 @@ def hello_world():
 @app.route("/snap")
 def get_snapshot():
     url = request.args.get('url')
-    if url is not None and url.startswith("https://twitter.com/"):
-        url = url.split("?")[0]
-        image_binary = get_snap(url)
-        response = make_response(image_binary)
-        response.headers.set('Content-Type', 'image/png')
-        response.headers.set(
-            'Content-Disposition',
-            'attachment',
-            filename="{}-{}.png".format(url.split('/')[3], url.split('/')[5]))
-        return response
+    if url:
+        if check_valid_url(url):
+            # remove unnecessary arguments from url
+            url = url.split("?")[0]
+
+            # filename for short url scheme
+            if url.startswith("https://t.co/"):
+                filename = url.split("/")[3] + ".png"
+            else:
+                filename = "{}-{}.png".format(url.split('/')[3], url.split('/')[5])
+            
+            # return image
+            image_binary = get_snap(url)
+            response = make_response(image_binary)
+            response.headers.set('Content-Type', 'image/png')
+            response.headers.set('Content-Disposition', 'attachment', filename=filename)
+            return response
+        else:
+            return render_template('index.html', error="Please provide a valid Twitter URL")
+
     else:
-        return render_template('index.html', error="Please provide a valid Twitter URL")
+        return render_template('index.html', error="URL is empty")
 
 if __name__ == '__main__':
     app.run(threaded=True, port=5000)
