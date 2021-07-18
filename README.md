@@ -1,5 +1,7 @@
 # TweetShot
 
+![Screenshot 2021-07-18 at 19-50-18 TweetShot](https://user-images.githubusercontent.com/73049418/126067815-a7cc9091-8b2f-4a0b-bbf3-a404a31752ff.png)
+
 A simple, heroku-compatible Twitter tweets screenshot generator. A sample project I made while learning Python, Flask, and Selenium.
 
 ## How to run
